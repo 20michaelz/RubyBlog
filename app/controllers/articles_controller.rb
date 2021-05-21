@@ -1,9 +1,10 @@
 class ArticlesController < ApplicationController
   
-  http_basic_authenticate_with name: "dhh", password: "secret", except: [:index, :show]
+  # This was the basic authentication
+  # http_basic_authenticate_with name: "dhh", password: "secret", except: [:index, :show]
 
   def index
-    @articles = Article.all
+    @articles = Article.where(status: 'public') 
   end
 
   def show 
@@ -16,6 +17,7 @@ class ArticlesController < ApplicationController
 
   def create
     @article = Article.new(article_params)
+    @article[:author_id] = current_user.id
 
     if @article.save
       redirect_to @article

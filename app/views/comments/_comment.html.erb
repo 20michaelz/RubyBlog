@@ -1,6 +1,10 @@
 <p>
   <strong>Commenter:</strong>
-  <%= comment.commenter %>
+  <% if User.find_by(id: comment.commenter_id) %>
+      <%= User.find_by(id: comment.commenter_id).username %>  
+  <% else %>
+      annonymous
+  <% end %>  
 </p>
 
 <p>
@@ -8,8 +12,10 @@
   <%= comment.body %>
 </p>
 
-<p>
-  <%= link_to 'Destroy Comment', [comment.article, comment],
-              method: :delete,
-              data: { confirm: "Are you sure?" } %>
-</p>
+<% if comment.commenter_id == session[:user_id]%>
+  <p>
+    <%= link_to 'Destroy Comment', [comment.article, comment],
+                method: :delete,
+                data: { confirm: "Are you sure?" } %>
+  </p>
+<% end %>
